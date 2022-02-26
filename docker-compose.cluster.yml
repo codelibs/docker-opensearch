@@ -1,0 +1,44 @@
+version: "3.2"
+services:
+  opensearch-node2:
+    image: opensearchproject/opensearch:1.2.4
+    container_name: opensearch-node2
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node2
+      - discovery.seed_hosts=opensearch-node1
+      - cluster.initial_master_nodes=opensearch-node1
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+    volumes:
+#      - type: bind
+#        source: ./opensearch/data02
+      - type: volume
+        source: opensearch-data2
+        target: /usr/share/opensearch/data
+    ports:
+      - target: 9200
+        published: 9201
+        protocol: tcp
+        mode: host
+    networks:
+      - opensearch-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    depends_on:
+      - opensearch-node1
+
+volumes:
+  opensearch-data2:
+    driver: local
+
