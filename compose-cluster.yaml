@@ -1,14 +1,14 @@
-version: "3.2"
 services:
   opensearch-node2:
-    image: opensearchproject/opensearch:1.2.4
+    image: opensearchproject/opensearch:2.0.0
     container_name: opensearch-node2
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node2
       - discovery.seed_hosts=opensearch-node1
-      - cluster.initial_master_nodes=opensearch-node1
+      - cluster.initial_cluster_manager_nodes=opensearch-node1
       - bootstrap.memory_lock=true
+      - plugins.security.disabled=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -24,10 +24,8 @@ services:
         source: opensearch-data2
         target: /usr/share/opensearch/data
     ports:
-      - target: 9200
-        published: 9201
-        protocol: tcp
-        mode: host
+      - 9201:9200
+      - 9601:9600
     networks:
       - opensearch-net
     logging:

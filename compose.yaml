@@ -1,15 +1,16 @@
-version: "3.2"
 services:
   opensearch-node1:
-    image: opensearchproject/opensearch:1.2.4
+    image: opensearchproject/opensearch:2.0.0
     container_name: opensearch-node1
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node1
       - discovery.seed_hosts=opensearch-node1
-      - cluster.initial_master_nodes=opensearch-node1
+      - cluster.initial_cluster_manager_nodes=opensearch-node1
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - plugins.security.disabled=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+
     ulimits:
       memlock:
         soft: -1
@@ -24,10 +25,8 @@ services:
         source: opensearch-data1
         target: /usr/share/opensearch/data
     ports:
-      - target: 9200
-        published: 9200
-        protocol: tcp
-        mode: host
+      - 9200:9200
+      - 9600:9600
     networks:
       - opensearch-net
     logging:
