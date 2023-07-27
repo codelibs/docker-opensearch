@@ -1,6 +1,6 @@
 services:
   opensearch-node2:
-    image: opensearchproject/opensearch:2.7.0
+    image: opensearchproject/opensearch:2.9.0
     container_name: opensearch-node2
     environment:
       - cluster.name=opensearch-cluster
