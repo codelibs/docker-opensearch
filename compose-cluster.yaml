@@ -1,6 +1,6 @@
 services:
   opensearch-node2:
-    image: opensearchproject/opensearch:2.11.1
+    image: opensearchproject/opensearch:2.12.0
     container_name: opensearch-node2
     environment:
       - cluster.name=opensearch-cluster
@@ -10,6 +10,7 @@ services:
       - bootstrap.memory_lock=true
       - plugins.security.disabled=true
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=0LX4wquYDZu6jsve"
     ulimits:
       memlock:
         soft: -1
